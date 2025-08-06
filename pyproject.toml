@@ -13,8 +13,8 @@ dependencies = [
     "uvicorn[standard] (>=0.35.0,<0.36.0)"
 ]
 
-[tool.poetry]
-packages = [{include = "fastapi_crud", from = "src"}]
+[tool.poetry.scripts]
+dev = "fastapi_crud.main:start"
 
 
 [build-system]
