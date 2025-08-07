@@ -1,11 +1,14 @@
 from fastapi import FastAPI
-from . import models,database
+from . import models,database,posts
 from .models import base
 import uvicorn
 
 
 
+
 app = FastAPI()
+
+app.include_router(posts.router)
 
 # Add function to create database tables from SQLAlchemy models
 def create_tables():
