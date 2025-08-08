@@ -1,4 +1,5 @@
 from pydantic import BaseModel,ConfigDict,EmailStr
+from datetime import datetime
 
 
 # reponse modele to get_all_posts
@@ -49,5 +50,9 @@ class Create_User(BaseModel):
 class User_out(BaseModel):
     id:int
     email:EmailStr
+    model_config=ConfigDict(from_attributes=True)
 
+class U_out(BaseModel):
+    id:int
+    email:EmailStr
     model_config=ConfigDict(from_attributes=True)

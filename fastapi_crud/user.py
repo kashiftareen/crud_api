@@ -10,7 +10,7 @@ router = APIRouter(
 )
 
 # Creates a new user with a hashed password and saves it to the database.
-@router.post("/user",status_code=status.HTTP_201_CREATED,response_model=schema.User_out)
+@router.post("/user",status_code=status.HTTP_201_CREATED,response_model=schema.U_out)
 def create_user(user:schema.Create_User,db:Session=Depends(get_db)):
     user.password =utils.hash(user.password)
     new_user = models.user(**user.dict())
