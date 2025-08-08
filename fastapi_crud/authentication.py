@@ -10,6 +10,7 @@ router = APIRouter(
 @router.post("/login",status_code=status.HTTP_201_CREATED)
 def user_login(user_credentials:OAuth2PasswordRequestForm=Depends()
                ,db:Session=Depends(database.get_db)):
+               
     user = db.query(models.user).filter(models.user.email == user_credentials.username).first()
     if user == None:
         raise HTTPException(

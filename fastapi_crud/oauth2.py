@@ -1,6 +1,7 @@
+from fastapi import Depends,HTTPException,status
 from jose import JWTError,jwt,exceptions
 from datetime import datetime,timedelta
-from . import config
+from . import config,schema
 from .config import settings
 from fastapi.security import OAuth2PasswordBearer
 
@@ -19,3 +20,24 @@ def create_access_token(data:dict):
 
     encoded_jwt = jwt.encode(to_encode,SECRET_KEY,algorithm=ALGORITHM)
     return encoded_jwt
+
+# FastAPI automatically gets the token from the request using oauth2_scheme
+def get_crruent_user(token:str=Depends(oauth2_scheme)):
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail="invalid input",
+        headers={"WWW-Authenticate": "Bearer"}
+        )
+    return verify_access_token(token,credentials_exception)
+
+
+def verify_access_token(token:str,credentials_exception):
+    try:
+        payload = jwt.decode(token,SECRET_KEY,algorithms=[ALGORITHM])
+        id:int = payload.get("user_id")
+        if id is None:
+           raise credentials_exception
+        token_data = schema.token_data(id = id)
+    except JWTError :
+        raise credentials_exception
+    return token_data

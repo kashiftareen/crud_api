@@ -7,3 +7,5 @@ def hash(password:str):
 #Verifies that a plain password matches the previously hashed password using bcrypt.
 def verify(plain_password,hashed_password):
     return pwd_context.verify(plain_password,hashed_password)
+
+

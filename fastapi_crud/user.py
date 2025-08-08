@@ -1,7 +1,7 @@
 from fastapi import Depends,status,HTTPException,APIRouter,Response
 from .database import get_db
 from sqlalchemy.orm import Session
-from . import schema,models,utils
+from . import schema,models,utils,oauth2
 
 
 
@@ -10,8 +10,11 @@ router = APIRouter(
 )
 
 # Creates a new user with a hashed password and saves it to the database.
-@router.post("/user",status_code=status.HTTP_201_CREATED,response_model=schema.U_out)
-def create_user(user:schema.Create_User,db:Session=Depends(get_db)):
+@router.post("/user",
+             status_code=status.HTTP_201_CREATED,
+             response_model=schema.U_out)
+def create_user(user:schema.Create_User,
+                db:Session=Depends(get_db)):
     user.password =utils.hash(user.password)
     new_user = models.user(**user.dict())
     db.add(new_user)
@@ -21,7 +24,8 @@ def create_user(user:schema.Create_User,db:Session=Depends(get_db)):
 
 #To get single User with path variable
 @router.get("/user{id}",status_code=status.HTTP_200_OK,response_model=schema.User_out)
-def get_single_user(id:int,db:Session=Depends(get_db)):
+def get_single_user(id:int,db:Session=Depends(get_db),
+                    crruent_user:schema.token_data=Depends(oauth2.get_crruent_user)):
     get_user = db.query(models.user).filter(models.user.id == id).first()
     if get_user == None:
         raise HTTPException(
