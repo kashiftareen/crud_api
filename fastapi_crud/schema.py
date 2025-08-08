@@ -38,3 +38,16 @@ class Update_Respons(BaseModel):
     title:str
     content:str
     model_config=ConfigDict(from_attributes=True)
+
+
+# To create new user in database 
+class Create_User(BaseModel):
+    email:EmailStr
+    password:str
+
+# respones model for user
+class User_out(BaseModel):
+    id:int
+    email:EmailStr
+
+    model_config=ConfigDict(from_attributes=True)
