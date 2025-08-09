@@ -7,7 +7,7 @@ router = APIRouter(
     tags=['Authentication']
 )
 # Authenticates user from form data and returns a JWT access token upon successful login.
-@router.post("/login",status_code=status.HTTP_201_CREATED)
+@router.post("/login",status_code=status.HTTP_200_OK)
 def user_login(user_credentials:OAuth2PasswordRequestForm=Depends()
                ,db:Session=Depends(database.get_db)):
                
@@ -22,10 +22,10 @@ def user_login(user_credentials:OAuth2PasswordRequestForm=Depends()
             status_code=status.HTTP_404_NOT_FOUND,
             detail="invalid user_credentials"
         )
-    access_tonken = oauth2.create_access_token(data={"user_id":user.id})
+    access_token = oauth2.create_access_token(data={"user_id":user.id})
 
     return {
-        "access_tonken":access_tonken,
-        "token type":"bearer"
+        "access_token":access_token,
+        "token_type":"bearer"
     }
     

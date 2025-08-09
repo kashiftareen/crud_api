@@ -57,5 +57,5 @@ class U_out(BaseModel):
     email:EmailStr
     model_config=ConfigDict(from_attributes=True)
 
-class token_data(BaseModel):
-    id:int
+class TokenData(BaseModel):
+    id : int

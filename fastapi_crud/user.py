@@ -25,7 +25,7 @@ def create_user(user:schema.Create_User,
 #To get single User with path variable
 @router.get("/user{id}",status_code=status.HTTP_200_OK,response_model=schema.User_out)
 def get_single_user(id:int,db:Session=Depends(get_db),
-                    crruent_user:schema.token_data=Depends(oauth2.get_crruent_user)):
+                    current_user: schema.TokenData = Depends(oauth2.get_current_user)):
     get_user = db.query(models.user).filter(models.user.id == id).first()
     if get_user == None:
         raise HTTPException(
