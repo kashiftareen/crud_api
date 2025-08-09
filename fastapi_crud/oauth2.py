@@ -22,9 +22,9 @@ def create_access_token(data:dict):
     return encoded_jwt
 
 # FastAPI automatically gets the token from the request using oauth2_scheme
-def get_crruent_user(token:str=Depends(oauth2_scheme)):
+def get_current_user(token:str=Depends(oauth2_scheme)):
     credentials_exception = HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND,
+        status_code=status.HTTP_401_UNAUTHORIZED,
         detail="invalid input",
         headers={"WWW-Authenticate": "Bearer"}
         )
@@ -37,7 +37,7 @@ def verify_access_token(token:str,credentials_exception):
         id:int = payload.get("user_id")
         if id is None:
            raise credentials_exception
-        token_data = schema.token_data(id = id)
+        token_data = schema.TokenData(id=id)
     except JWTError :
         raise credentials_exception
     return token_data
