@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, status, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
 from .database import get_db
-from . import Basic_auth, models, schema
+from . import Basic_auth, models,schema
 
 # Create a router instance with a prefix for all post-related endpoints
 router = APIRouter(
@@ -11,12 +11,12 @@ router = APIRouter(
 )
 
 # ----------------------------- CREATE POST
-@router.post("/", status_code=status.HTTP_201_CREATED, response_model=schema.Response_Of_Create_Post)
+@router.post("/", status_code=status.HTTP_201_CREATED,
+              response_model=schema.Response_Of_Create_Post)
 def create_post(
     post_data: schema.Create_Post,
     db: Session = Depends(get_db),
-    current_user: schema.TokenData = Depends(Basic_auth.get_current_user)  
-):
+    current_user: schema.TokenData = Depends(Basic_auth.get_current_user)):
     post = models.Post(**post_data.dict())
     db.add(post)
     db.commit()
@@ -28,19 +28,17 @@ def create_post(
 @router.get("/", status_code=status.HTTP_200_OK, response_model=List[schema.Response])
 def get_posts(
     db: Session = Depends(get_db),
-    current_user: schema.TokenData = Depends(Basic_auth.get_current_user)  
-):
+    current_user: schema.TokenData = Depends(Basic_auth.get_current_user)):
     posts = db.query(models.Post).all()
     return posts
 
 
 # ----------------------------- GET POST BY ID 
-@router.get("/{id}", response_model=schema.Response_By_Id, status_code=status.HTTP_200_OK)
+@router.get("/{id}",response_model=schema.Response_By_Id, status_code=status.HTTP_200_OK)
 def get_post_by_id(
     id: int,
     db: Session = Depends(get_db),
-    current_user: schema.TokenData = Depends(Basic_auth.get_current_user) 
-):
+    current_user: schema.TokenData = Depends(Basic_auth.get_current_user)):
     post = db.query(models.Post).filter(models.Post.id == id).first()
     if not post:
         raise HTTPException(
@@ -55,8 +53,7 @@ def get_post_by_id(
 def delete_post(
     id: int,
     db: Session = Depends(get_db),
-    current_user: schema.TokenData = Depends(Basic_auth.get_current_user)  
-):
+    current_user: schema.TokenData = Depends(Basic_auth.get_current_user)):
     post_query = db.query(models.Post).filter(models.Post.id == id)
     post = post_query.first()
     if post is None:
@@ -75,8 +72,7 @@ def update_post(
     id: int,
     newpost: schema.new_post_data,
     db: Session = Depends(get_db),
-    current_user: schema.TokenData = Depends(Basic_auth.get_current_user) 
-):
+    current_user: schema.TokenData = Depends(Basic_auth.get_current_user)):
     post_query = db.query(models.Post).filter(models.Post.id == id)
     post = post_query.first()
 

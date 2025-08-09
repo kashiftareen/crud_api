@@ -3,8 +3,6 @@ from .database import get_db
 from sqlalchemy.orm import Session
 from . import Basic_auth, schema,models,utils
 
-
-
 router = APIRouter(
     tags=['users']
 )
