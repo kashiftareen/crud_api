@@ -1,6 +1,5 @@
 from fastapi import FastAPI
 from . import models,database,posts,user,authentication
-from .models import base
 import uvicorn
 
 

@@ -1,7 +1,7 @@
 from fastapi import Depends,status,HTTPException,APIRouter,Response
 from .database import get_db
 from sqlalchemy.orm import Session
-from . import schema,models,utils,oauth2
+from . import Basic_auth, schema,models,utils
 
 
 
@@ -25,7 +25,7 @@ def create_user(user:schema.Create_User,
 #To get single User with path variable
 @router.get("/user{id}",status_code=status.HTTP_200_OK,response_model=schema.User_out)
 def get_single_user(id:int,db:Session=Depends(get_db),
-                    current_user: schema.TokenData = Depends(oauth2.get_current_user)):
+                    current_user: schema.TokenData = Depends(Basic_auth.get_current_user)):
     get_user = db.query(models.user).filter(models.user.id == id).first()
     if get_user == None:
         raise HTTPException(

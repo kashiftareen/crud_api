@@ -11,8 +11,6 @@ class Post(base):
     content =Column(String,nullable=False)
     published = Column(Boolean,default=True)
     create_at = Column(TIMESTAMP(timezone=True),nullable=False,server_default=text('Now()'))
-    # owner_id =Column(Integer,ForeignKey("users.id",ondelete="CASCADE"),nullable=False)
-    # onwer = relationship("user")
 
 class user (base):
     __tablename__="users"
